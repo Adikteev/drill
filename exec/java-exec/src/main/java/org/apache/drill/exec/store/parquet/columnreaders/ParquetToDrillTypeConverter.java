@@ -53,6 +53,8 @@ public class ParquetToDrillTypeConverter {
           case DECIMAL:
             ParquetReaderUtility.checkDecimalTypeEnabled(options);
             return (getDecimalType(precision));
+          case ENUM:
+            return (TypeProtos.MinorType.VARCHAR);
           default:
             return (TypeProtos.MinorType.VARBINARY);
         }

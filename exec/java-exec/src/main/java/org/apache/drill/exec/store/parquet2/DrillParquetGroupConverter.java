@@ -277,8 +277,13 @@ public class DrillParquetGroupConverter extends GroupConverter {
               return new DrillBinaryToDecimal38Converter(writer, metadata.getPrecision(), metadata.getScale(), mutator.getManagedBuffer());
             }
           }
+          case ENUM: {
+            VarCharWriter writer = type.getRepetition() == Repetition.REPEATED ? mapWriter.list(name).varChar() : mapWriter.varChar(name);
+            return new DrillVarCharConverter(writer, mutator.getManagedBuffer());
+          }
           default: {
-            throw new UnsupportedOperationException("Unsupported type " + type.getOriginalType());
+            VarBinaryWriter writer = type.getRepetition() == Repetition.REPEATED ? mapWriter.list(name).varBinary() : mapWriter.varBinary(name);
+            return new DrillVarBinaryConverter(writer, mutator.getManagedBuffer());
           }
         }
       }
